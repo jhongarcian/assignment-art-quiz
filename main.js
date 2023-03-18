@@ -58,6 +58,12 @@ const scultureComponent = (props) => {
   parentTag.append(tag);
 };
 
+// Random Section Component 
+
+const randomSectionComponent = () => {
+    
+}
+
 // Global Function
 function createImgComponent(props) {
   const { imgTag, parentTag, source, name } = props;
@@ -69,7 +75,7 @@ function createImgComponent(props) {
 // JS code here with a change
 
 const fetchtData = async () => {
-  const url = "https://api.artic.edu/api/v1/artworks?page=2&limit=50";
+  const url = "https://api.artic.edu/api/v1/artworks?page=2&limit=100";
   const response = await fetch(url);
   const data = await response.json();
   const data_artWork = data.data;
@@ -79,7 +85,8 @@ const fetchtData = async () => {
       title: item.title,
       image_id: item.image_id,
       date: item.date_display,
-      artistName: item.artist_titles
+      artistName: item.artist_titles,
+      details: item.medium_display
     };
   });
   return link;
@@ -97,21 +104,31 @@ const getData = async (number) => {
 
 // THIS SECTIONS IS FOR THE SINGLE CONTAINER 
 const getInfoForSectionOne = async (number) => {
-    const sourceUrl = async () => {
+    const getSingleData = async () => {
         const info = await getData(number)
         const result = info.map(item => {
-            return item.image_id
+            return item
         })
-        const src = `https://www.artic.edu/iiif/2/${result}/full/843,/0/default.jpg`; 
-        return src
+        return result
     }
     
-    const printSrcToHtml = async () => {
+    const printRandomContainer = async () => {
         const imgTag = document.querySelector("#single-image");
-        const src = await sourceUrl();
-        imgTag.src = src
+        const title = document.querySelector("#randomContainerTitle");
+        const artist = document.querySelector("#randomContainerArtist");
+        const date = document.querySelector("#randomContainerDate");
+        const details = document.querySelector("#randomContainerDetails");
+        
+        const data = await getSingleData();
+        data.map(x => {
+            imgTag.src = `https://www.artic.edu/iiif/2/${x.image_id}/full/843,/0/default.jpg`;
+            title.textContent = x.title
+            artist.textContent = x.artistName
+            date.textContent = x.date
+            details.textContent = x.details
+        })
     }
-    printSrcToHtml()
+    printRandomContainer()
 
 }
 
@@ -120,7 +137,7 @@ const getInfoForSectionTwo = async (number) => {
   const sourceUrl = async () => {
     let threeImgs = []
     const info = await getData(number);
-    const result = info.map((item) => {
+    info.map((item) => {
         threeImgs.push(
           `https://www.artic.edu/iiif/2/${item.image_id}/full/843,/0/default.jpg`
         );
@@ -140,7 +157,7 @@ const getInfoForSectionTwo = async (number) => {
 };
 
 getInfoForSectionOne(1)
-getInfoForSectionTwo(3)
+
 
 
 

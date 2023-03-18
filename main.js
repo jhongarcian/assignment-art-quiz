@@ -1,3 +1,10 @@
+let menu = document.query('#menu-icon');
+let navbar = document.query('.navbar');
+
+menu.onclick = () => {
+    menu.classList.toggle('bx-x');
+    navbar.classList.toggle('open');
+}
 const sectionMain = document.querySelector("#main-section");
 // Hero Section Component
 

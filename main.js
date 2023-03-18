@@ -68,6 +68,97 @@ function createImgComponent(props) {
 }
 // JS code here with a change
 
+const fetchtData = async () => {
+  const url = "https://api.artic.edu/api/v1/artworks?page=2&limit=50";
+  const response = await fetch(url);
+  const data = await response.json();
+  const data_artWork = data.data;
+  const link = data_artWork.map((item) => {
+    return {
+      apiLink: item.api_link,
+      title: item.title,
+      image_id: item.image_id,
+      date: item.date_display,
+      artistName: item.artist_titles
+    };
+  });
+  return link;
+};
+
+const getData = async (number) => {
+  let data = [];
+  const api_Link = await fetchtData();
+  const arrayShuffled = shuffleArray(api_Link);
+  for (let i = 0; i < number; i++) {
+    data.push(arrayShuffled.pop());
+  }
+  return data;
+};
+
+// THIS SECTIONS IS FOR THE SINGLE CONTAINER 
+const getInfoForSectionOne = async (number) => {
+    const sourceUrl = async () => {
+        const info = await getData(number)
+        const result = info.map(item => {
+            return item.image_id
+        })
+        const src = `https://www.artic.edu/iiif/2/${result}/full/843,/0/default.jpg`; 
+        return src
+    }
+    
+    const printSrcToHtml = async () => {
+        const imgTag = document.querySelector("#single-image");
+        const src = await sourceUrl();
+        imgTag.src = src
+    }
+    printSrcToHtml()
+
+}
+
+// THIS SECTION IS FOR THE 3 IMAGES CONTAINER
+const getInfoForSectionTwo = async (number) => {
+  const sourceUrl = async () => {
+    let threeImgs = []
+    const info = await getData(number);
+    const result = info.map((item) => {
+        threeImgs.push(
+          `https://www.artic.edu/iiif/2/${item.image_id}/full/843,/0/default.jpg`
+        );
+    });
+    console.log(threeImgs)
+    return threeImgs;
+  };
+
+  const printSrcToHtml = async () => {
+    const imgTag = document.querySelector("#single-image");
+    const imgTag2 = document.querySelector("#single-image");
+    const imgTag3 = document.querySelector("#single-image");
+    const src = await sourceUrl();
+    imgTag.src = src;
+  };
+  printSrcToHtml();
+};
+
+getInfoForSectionOne(1)
+getInfoForSectionTwo(3)
+
+
+
+
+function shuffleArray(array) {
+  let currentIndex = array.length,
+    randomIndex;
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+  return array;
+}
 window.addEventListener("DOMContentLoaded", (event) => {
   heroSectionComponent();
 });

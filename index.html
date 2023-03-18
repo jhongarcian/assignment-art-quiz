@@ -3,24 +3,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navbar</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-
     <script src="./main.js" defer></script>
     <link rel="stylesheet" href="./style.css">
     <title>Art Quiz</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 </head>
 <body>
     <div class="app" id="app">
         <header>
-            <img src="" alt="">
-            <nav>
-                <ul>
-                    <li>quiz art</li>
-                </ul>
-            </nav>
+            <a href="#" class="logo">
+                <img src="Assets/Art Quiz Logo.png" class="logo">
+            </a>
+            <ul class="navbar">
+                <a href="#" class="active">Home</a>
+                <a href="#">Quiz App</a>
+                <a href="#">Galleria</a>
+            </ul>
+            <div class="main">
+                <div class="bx bx-menu" id="menu-icon"></div>
+            </div>
         </header>
         <main class="flex-container" id="main-section">
             <section class="random-container section__container">
@@ -79,20 +80,5 @@
         </main>
         <footer></footer>
     </div>
-
-    <header>
-        <a href="#" class="logo"><img src="Assets/Art Quiz Logo.png" class="logo"><span></span></a>
-
-        <ul class="navbar">
-            <a href="#" class="active">Home</a>
-            <a href="#">Quiz App</a>
-            <a href="#">Galleria</a>
-        </ul>
-        <div class="main">
-        <div class="bx bx-menu" id="menu-icon"></div>
-        </div>
-    </header>
-
-    <script src="main.js"></script>
 </body>
 </html>

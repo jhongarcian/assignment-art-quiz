@@ -171,7 +171,7 @@ function createHtmlElement(props) {
 // JS code here with a change
 
 const fetchtData = async () => {
-  const url = "https://api.artic.edu/api/v1/artworks?page=3&limit=40";
+  const url = "https://api.artic.edu/api/v1/artworks?page=3&limit=44";
   const response = await fetch(url);
   const data = await response.json();
   const data_artWork = data.data;
@@ -198,6 +198,7 @@ const getData = async (number) => {
   for (let i = 0; i < number; i++) {
     data.push(arrayShuffled.pop());
   }
+  console.log(arrayShuffled.length)
   return data;
 };
 
@@ -208,6 +209,7 @@ const getInfoForSectionOne = async (number) => {
     const result = info.map((item) => {
       return item;
     });
+    console.log(result.length)
     return result;
   };
 

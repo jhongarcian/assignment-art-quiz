@@ -158,7 +158,8 @@ function createImgComponent(props) {
   imgTag.src = source;
   imgTag.alt = name;
   parentTag.append(imgTag);
-}
+};
+
 function createHtmlElement(props) {
   const { tag_Name, parent_Tag, class_Name, id_Name, text_Content } = props;
   const htmlTag = document.createElement(`${tag_Name}`);
@@ -168,7 +169,6 @@ function createHtmlElement(props) {
   parent_Tag.append(htmlTag);
   return htmlTag;
 }
-// JS code here with a change
 
 const fetchtData = async () => {
   const url = "https://api.artic.edu/api/v1/artworks?page=3&limit=44";
@@ -274,3 +274,5 @@ window.addEventListener("DOMContentLoaded", (event) => {
   heroSectionComponent();
   randomSectionComponent();
 });
+
+

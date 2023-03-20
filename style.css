@@ -59,6 +59,7 @@ h4 {
 /* Navbar Section */
 header{
     position: fixed;
+    height: 70px;
     width: 100%;
     top: 0;
     right: 0;
@@ -66,9 +67,10 @@ header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: transparent;
+    background: whitesmoke;
     padding: 0 20%;
     transition: all .50s ease;
+    opacity: 85%;
 }
 
 .logo{
@@ -78,6 +80,11 @@ header{
 
 .navbar{
     display: flex;
+}
+
+img{
+    width: 180px;
+    height:auto 
 }
 
 .navbar a{

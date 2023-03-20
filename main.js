@@ -65,9 +65,10 @@ function createImgComponent(props) {
   imgTag.src = source;
   imgTag.alt = name;
   parentTag.append(imgTag);
-}
-// JS code here with a change
+};
 
 window.addEventListener("DOMContentLoaded", (event) => {
   heroSectionComponent();
 });
+
+

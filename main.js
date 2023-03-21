@@ -161,17 +161,24 @@ function createImgComponent(props) {
 }
 
 function createHtmlElement(props) {
-  const { tag_Name, parent_Tag, class_Name, id_Name, text_Content } = props;
+  const { tag_Name , parent_Tag, class_Name, id_Name, text_Content, source } = props;
   const htmlTag = document.createElement(`${tag_Name}`);
   htmlTag.textContent = text_Content;
-  htmlTag.id = id_Name;
-  htmlTag.className = class_Name;
+  if(id_Name){
+    htmlTag.id = id_Name;
+  }
+  if(class_Name){
+    htmlTag.className = class_Name;
+  }
+  if(source) {
+    htmlTag.src = source
+  }
   parent_Tag.append(htmlTag);
   return htmlTag;
 }
 
 const fetchtData = async () => {
-  const url = "https://api.artic.edu/api/v1/artworks?page=3&limit=44";
+  const url = "https://api.artic.edu/api/v1/artworks?page=3&limit=50";
   const response = await fetch(url);
   const data = await response.json();
   const data_artWork = data.data;
@@ -193,8 +200,8 @@ const fetchtData = async () => {
 const getData = async (number) => {
   let data = [];
   const api_Link = await fetchtData();
-  const arrayShuffled = shuffleArray(api_Link);
-  console.log(arrayShuffled);
+  const cleanData = await api_Link.filter(item => item !== undefined)
+  const arrayShuffled = shuffleArray(cleanData);
   for (let i = 0; i < number; i++) {
     data.push(arrayShuffled.pop());
   }
@@ -271,9 +278,27 @@ function shuffleArray(array) {
 
 //  QUIZ SECTION
 
-const quizSectionComponent = async () => {};
+const printImagesToQuizContainer = async (number) => {
+
+  const containerImgDisplay = document.querySelector("#image-quiz-container");
+  const data = await getSingleData(number);
+  for(let i = 0; i < number ; i++){
+    createHtmlElement({
+      tag_Name: "img",
+      parent_Tag: containerImgDisplay,
+      source: `https://www.artic.edu/iiif/2/${data[i].image_id}/full/843,/0/default.jpg`,
+    });
+  }
+
+  
+};
+
+const quizSectionComponent = () => {
+  printImagesToQuizContainer(4);
+};
 
 window.addEventListener("DOMContentLoaded", (event) => {
   heroSectionComponent();
   randomSectionComponent();
+  quizSectionComponent();
 });

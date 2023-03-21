@@ -68,7 +68,7 @@ const randomSectionComponent = () => {
   divArtistContainerSectionRandom(sectionRandomImg);
   divInfoContainerSectionRandom(sectionRandomImg);
 
-  getInfoForSectionOne(1);
+  printRandomContainer(1);
 };
 
 const divArtistContainerSectionRandom = (sectionRandomImg) => {
@@ -158,7 +158,7 @@ function createImgComponent(props) {
   imgTag.src = source;
   imgTag.alt = name;
   parentTag.append(imgTag);
-};
+}
 
 function createHtmlElement(props) {
   const { tag_Name, parent_Tag, class_Name, id_Name, text_Content } = props;
@@ -198,38 +198,36 @@ const getData = async (number) => {
   for (let i = 0; i < number; i++) {
     data.push(arrayShuffled.pop());
   }
-  console.log(arrayShuffled.length)
+  console.log(arrayShuffled.length);
   return data;
 };
 
 // THIS SECTIONS IS FOR THE SINGLE CONTAINER
-const getInfoForSectionOne = async (number) => {
-  const getSingleData = async () => {
-    const info = await getData(number);
-    const result = info.map((item) => {
-      return item;
-    });
-    console.log(result.length)
-    return result;
-  };
+const getSingleData = async (number) => {
+  const info = await getData(number);
+  const result = info.map((item) => {
+    return item;
+  });
 
-  const printRandomContainer = async () => {
-    const imgTag = document.querySelector("#single-image");
-    const title = document.querySelector("#randomContainerTitle");
-    const artist = document.querySelector("#randomContainerArtist");
-    const date = document.querySelector("#randomContainerDate");
-    const details = document.querySelector("#randomContainerDetails");
+  return result;
+};
 
-    const data = await getSingleData();
-    data.map((x) => {
-      imgTag.src = `https://www.artic.edu/iiif/2/${x.image_id}/full/843,/0/default.jpg`;
-      title.textContent = x.title;
-      artist.textContent = x.artistName;
-      date.textContent = x.date;
-      details.textContent = x.details;
-    });
-  };
-  printRandomContainer();
+const printRandomContainer = async (number) => {
+  const imgTag = document.querySelector("#single-image");
+  const title = document.querySelector("#randomContainerTitle");
+  const artist = document.querySelector("#randomContainerArtist");
+  const date = document.querySelector("#randomContainerDate");
+  const details = document.querySelector("#randomContainerDetails");
+
+  const data = await getSingleData(number);
+  console.log(data);
+  data.map((x) => {
+    imgTag.src = `https://www.artic.edu/iiif/2/${x.image_id}/full/843,/0/default.jpg`;
+    title.textContent = x.title;
+    artist.textContent = x.artistName;
+    date.textContent = x.date;
+    details.textContent = x.details;
+  });
 };
 
 // THIS SECTION IS FOR THE 3 IMAGES CONTAINER
@@ -270,9 +268,12 @@ function shuffleArray(array) {
   }
   return array;
 }
+
+//  QUIZ SECTION
+
+const quizSectionComponent = async () => {};
+
 window.addEventListener("DOMContentLoaded", (event) => {
   heroSectionComponent();
   randomSectionComponent();
 });
-
-

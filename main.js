@@ -1,7 +1,7 @@
 let menu = document.querySelector("#menu-icon");
 let navbar = document.querySelector(".navbar");
 let trackingImagesState = [];
-let collection = []
+let collection = [];
 
 menu.onclick = () => {
   menu.classList.toggle("bx-x");
@@ -191,8 +191,8 @@ function createHtmlElement(props) {
 }
 
 const fetchtData = async () => {
-  const pageNumber = Math.floor(Math.random() * 10);
-  const url = `https://api.artic.edu/api/v1/artworks?page=${pageNumber}&limit=50`;
+  const pageNumber = Math.floor(Math.random() * 20);
+  const url = `https://api.artic.edu/api/v1/artworks?page=${pageNumber}&limit=40`;
   const response = await fetch(url);
   const data = await response.json();
   const data_artWork = data.data;
@@ -215,10 +215,17 @@ const fetchtData = async () => {
 const getData = async (number) => {
   let data = [];
   const api_Link = await fetchtData();
-  collection = api_Link
-  console.log(collection)
-  const cleanData = api_Link.filter((item) => item !== undefined);
-  const arrayShuffled = shuffleArray(cleanData);
+  const cleanData = api_Link.filter(
+    (item) => item !== undefined && item.artistName.length !== 0
+  );
+  // question about this line of code
+  const uniqueArtworks = cleanData.filter((artwork, index, array) => {
+    return !array.slice(0, index).some((prevArtwork) => {
+      return prevArtwork.artistName[0] === artwork.artistName[0];
+    });
+  });
+
+  const arrayShuffled = shuffleArray(uniqueArtworks);
   for (let i = 0; i < number; i++) {
     data.push(arrayShuffled.pop());
   }
@@ -298,9 +305,14 @@ function shuffleArray(array) {
 const printImagesToQuizContainer = async (number) => {
   const isImageContainerInDom = document.querySelectorAll("[data-id]");
   const containerImgDisplay = document.querySelector("#image-quiz-container");
+  if (isImageContainerInDom.length > 0) {
     const data = await getSingleData(number);
-  if(isImageContainerInDom.length > 0) {
-    isImageContainerInDom.forEach(item => item.remove())
+    console.log("=====================================");
+    data.forEach((item) => {
+      console.log(item.artistName);
+    });
+    console.log("=====================================");
+    isImageContainerInDom.forEach((item) => item.remove());
     setQuestion(data);
     trackingImagesState = data;
     for (let i = 0; i < number; i++) {
@@ -312,7 +324,13 @@ const printImagesToQuizContainer = async (number) => {
       });
     }
   }
-  if(isImageContainerInDom.length === 0) {
+  if (isImageContainerInDom.length === 0) {
+    const data = await getSingleData(number);
+    console.log("=====================================");
+    data.forEach((item) => {
+      console.log(item.artistName);
+    });
+    console.log("=====================================");
     setQuestion(data);
     trackingImagesState = data;
     for (let i = 0; i < number; i++) {
@@ -324,7 +342,6 @@ const printImagesToQuizContainer = async (number) => {
       });
     }
   }
-
 };
 
 const getRandomElemFormArray = (array) => {
@@ -345,6 +362,11 @@ const quizSectionComponent = () => {
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("[data-id")) {
+    console.log("================== Clicked ===================");
+    trackingImagesState.forEach((item) => {
+      console.log(item.id);
+    });
+    console.log("=====================================");
     printImagesToQuizContainer(4);
   }
 });

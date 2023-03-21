@@ -161,7 +161,7 @@ function createImgComponent(props) {
 }
 
 function createHtmlElement(props) {
-  const { tag_Name , parent_Tag, class_Name, id_Name, text_Content, source } = props;
+  const { tag_Name , parent_Tag, class_Name, id_Name, text_Content, source, dataAttribute } = props;
   const htmlTag = document.createElement(`${tag_Name}`);
   htmlTag.textContent = text_Content;
   if(id_Name){
@@ -172,6 +172,9 @@ function createHtmlElement(props) {
   }
   if(source) {
     htmlTag.src = source
+  }
+  if(dataAttribute) {
+    htmlTag.dataset.id = dataAttribute
   }
   parent_Tag.append(htmlTag);
   return htmlTag;
@@ -185,6 +188,7 @@ const fetchtData = async () => {
   const link = data_artWork.map((item) => {
     if (item.image_id) {
       return {
+        id: item.id,
         apiLink: item.api_link,
         title: item.title,
         image_id: item.image_id,
@@ -279,7 +283,6 @@ function shuffleArray(array) {
 //  QUIZ SECTION
 
 const printImagesToQuizContainer = async (number) => {
-
   const containerImgDisplay = document.querySelector("#image-quiz-container");
   const data = await getSingleData(number);
   for(let i = 0; i < number ; i++){
@@ -287,10 +290,9 @@ const printImagesToQuizContainer = async (number) => {
       tag_Name: "img",
       parent_Tag: containerImgDisplay,
       source: `https://www.artic.edu/iiif/2/${data[i].image_id}/full/843,/0/default.jpg`,
+      dataAttribute: data[i].id
     });
   }
-
-  
 };
 
 const quizSectionComponent = () => {

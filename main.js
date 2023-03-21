@@ -1,5 +1,7 @@
 let menu = document.querySelector("#menu-icon");
 let navbar = document.querySelector(".navbar");
+let trackingImagesState = [];
+let collection = []
 
 menu.onclick = () => {
   menu.classList.toggle("bx-x");
@@ -161,27 +163,36 @@ function createImgComponent(props) {
 }
 
 function createHtmlElement(props) {
-  const { tag_Name , parent_Tag, class_Name, id_Name, text_Content, source, dataAttribute } = props;
+  const {
+    tag_Name,
+    parent_Tag,
+    class_Name,
+    id_Name,
+    text_Content,
+    source,
+    dataAttribute,
+  } = props;
   const htmlTag = document.createElement(`${tag_Name}`);
   htmlTag.textContent = text_Content;
-  if(id_Name){
+  if (id_Name) {
     htmlTag.id = id_Name;
   }
-  if(class_Name){
+  if (class_Name) {
     htmlTag.className = class_Name;
   }
-  if(source) {
-    htmlTag.src = source
+  if (source) {
+    htmlTag.src = source;
   }
-  if(dataAttribute) {
-    htmlTag.dataset.id = dataAttribute
+  if (dataAttribute) {
+    htmlTag.dataset.id = dataAttribute;
   }
   parent_Tag.append(htmlTag);
   return htmlTag;
 }
 
 const fetchtData = async () => {
-  const url = "https://api.artic.edu/api/v1/artworks?page=3&limit=50";
+  const pageNumber = Math.floor(Math.random() * 10);
+  const url = `https://api.artic.edu/api/v1/artworks?page=${pageNumber}&limit=50`;
   const response = await fetch(url);
   const data = await response.json();
   const data_artWork = data.data;
@@ -204,7 +215,9 @@ const fetchtData = async () => {
 const getData = async (number) => {
   let data = [];
   const api_Link = await fetchtData();
-  const cleanData = await api_Link.filter(item => item !== undefined)
+  collection = api_Link
+  console.log(collection)
+  const cleanData = api_Link.filter((item) => item !== undefined);
   const arrayShuffled = shuffleArray(cleanData);
   for (let i = 0; i < number; i++) {
     data.push(arrayShuffled.pop());
@@ -242,28 +255,28 @@ const printRandomContainer = async (number) => {
 };
 
 // THIS SECTION IS FOR THE 3 IMAGES CONTAINER
-const getInfoForSectionTwo = async (number) => {
-  const sourceUrl = async () => {
-    let threeImgs = [];
-    const info = await getData(number);
-    info.map((item) => {
-      threeImgs.push(
-        `https://www.artic.edu/iiif/2/${item.image_id}/full/843,/0/default.jpg`
-      );
-    });
-    console.log(threeImgs);
-    return threeImgs;
-  };
+// const getInfoForSectionTwo = async (number) => {
+//   const sourceUrl = async () => {
+//     let threeImgs = [];
+//     const info = await getData(number);
+//     info.map((item) => {
+//       threeImgs.push(
+//         `https://www.artic.edu/iiif/2/${item.image_id}/full/843,/0/default.jpg`
+//       );
+//     });
+//     console.log(threeImgs);
+//     return threeImgs;
+//   };
 
-  const printSrcToHtml = async () => {
-    const imgTag = document.querySelector("#single-image");
-    const imgTag2 = document.querySelector("#single-image");
-    const imgTag3 = document.querySelector("#single-image");
-    const src = await sourceUrl();
-    imgTag.src = src;
-  };
-  printSrcToHtml();
-};
+//   const printSrcToHtml = async () => {
+//     const imgTag = document.querySelector("#single-image");
+//     const imgTag2 = document.querySelector("#single-image");
+//     const imgTag3 = document.querySelector("#single-image");
+//     const src = await sourceUrl();
+//     imgTag.src = src;
+//   };
+//   printSrcToHtml();
+// };
 
 function shuffleArray(array) {
   let currentIndex = array.length,
@@ -283,22 +296,58 @@ function shuffleArray(array) {
 //  QUIZ SECTION
 
 const printImagesToQuizContainer = async (number) => {
+  const isImageContainerInDom = document.querySelectorAll("[data-id]");
   const containerImgDisplay = document.querySelector("#image-quiz-container");
-  const data = await getSingleData(number);
-  for(let i = 0; i < number ; i++){
-    createHtmlElement({
-      tag_Name: "img",
-      parent_Tag: containerImgDisplay,
-      source: `https://www.artic.edu/iiif/2/${data[i].image_id}/full/843,/0/default.jpg`,
-      dataAttribute: data[i].id
-    });
+    const data = await getSingleData(number);
+  if(isImageContainerInDom.length > 0) {
+    isImageContainerInDom.forEach(item => item.remove())
+    setQuestion(data);
+    trackingImagesState = data;
+    for (let i = 0; i < number; i++) {
+      createHtmlElement({
+        tag_Name: "img",
+        parent_Tag: containerImgDisplay,
+        source: `https://www.artic.edu/iiif/2/${data[i].image_id}/full/843,/0/default.jpg`,
+        dataAttribute: data[i].id,
+      });
+    }
   }
+  if(isImageContainerInDom.length === 0) {
+    setQuestion(data);
+    trackingImagesState = data;
+    for (let i = 0; i < number; i++) {
+      createHtmlElement({
+        tag_Name: "img",
+        parent_Tag: containerImgDisplay,
+        source: `https://www.artic.edu/iiif/2/${data[i].image_id}/full/843,/0/default.jpg`,
+        dataAttribute: data[i].id,
+      });
+    }
+  }
+
+};
+
+const getRandomElemFormArray = (array) => {
+  const randomedElement = array[Math.floor(Math.random() * array.length)];
+  return randomedElement;
+};
+
+const setQuestion = (data) => {
+  const questionName = document.querySelector("#question-name");
+  const imagesWithName = data.filter((item) => item.artistName.length >= 0);
+  const questionElement = getRandomElemFormArray(imagesWithName);
+  questionName.textContent = questionElement.artistName;
 };
 
 const quizSectionComponent = () => {
   printImagesToQuizContainer(4);
 };
 
+document.addEventListener("click", (event) => {
+  if (event.target.matches("[data-id")) {
+    printImagesToQuizContainer(4);
+  }
+});
 window.addEventListener("DOMContentLoaded", (event) => {
   heroSectionComponent();
   randomSectionComponent();

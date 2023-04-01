@@ -16,15 +16,15 @@
             </a>
             <ul class="navbar">
                 <a href="#" class="active">Home</a>
-                <a href="#">Quiz App</a>
-                <a href="#">Galleria</a>
+                <a href="#image-quiz-container">Quiz App</a>
+                <a href="#galleria">Galleria</a>
             </ul>
             <div class="main">
                 <div class="bx bx-menu" id="menu-icon"></div>
             </div>
         </header>
         <main class="flex-container" id="main-section">
-            <section class="three-images-container section__container">
+            <section id="galleria" class="three-images-container section__container">
                 <h2 class="sub-title section-2">Three Images to Awaken Your Senses</h2>
                 <div class="images-container">
                     <div class="image-container">
@@ -46,18 +46,16 @@
                 <div>
                     <div class="quiz-container__images">
                         <div class="state-tracking">
-                            <span class="span-text question-span" >Question <span>1</span> / 10</span>
-                            <div class="score-text">Performance Score: <span>75%</span></div>
+                            <span class="span-text question-span" >Question <span id="current-question">1</span> / 10</span>
+                            <div class="score-text">Performance Score: <span id="current-performance-score">0%</span></div>
                             <div class="score-tracker">
-                                <div class="score-bar" style="width: 100%;"></div>
+                                <div id="score-bar" class="score-bar" style="width: 0%;"></div>
                             </div>
                         </div>
-                        <span class="span-text">Select the work created by Vincent Van Gogh</span>
-                        <div class="image-grid">
-                            <img src="https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/843,/0/default.jpg" alt="">
-                            <img src="https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/843,/0/default.jpg" alt="">
-                            <img src="https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/843,/0/default.jpg" alt="">
-                            <img src="https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/843,/0/default.jpg" alt="">
+                        <span class="span-text">Select the work created by 
+                            <span class="span-text" id="question-name"></span>
+                        </span>
+                        <div id="image-quiz-container" class="image-grid">
                         </div>
                         <button class="btn">reset</button>
                     </div>
